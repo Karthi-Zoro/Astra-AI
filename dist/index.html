@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astra AI - Premium Chat Assistant</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Markdown Parser (Marked) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Code Syntax Highlighting (Prism) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  
+  <!-- Custom Stylesheet -->
+  <script type="module" crossorigin src="/assets/index-CYeckuhn.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BVHspsBM.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <i data-lucide="sparkles"></i>
+          </div>
+          <span>Astra AI</span>
+        </div>
+        <button class="icon-btn close-sidebar-btn" id="closeSidebarBtn" title="Close Sidebar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <button class="new-chat-btn" id="newChatBtn">
+        <i data-lucide="plus"></i>
+        <span>New Chat</span>
+      </button>
+
+      <div class="sidebar-scroll">
+        <div class="chat-history-list" id="chatHistoryList">
+          <!-- Chat list items will be injected here by app.js -->
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="footer-btn" id="openSettingsBtn">
+          <i data-lucide="settings"></i>
+          <span>Settings</span>
+        </button>
+        <button class="footer-btn text-danger" id="clearAllChatsBtn">
+          <i data-lucide="trash-2"></i>
+          <span>Clear Conversations</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Chat Workspace -->
+    <main class="chat-workspace">
+      
+      <!-- Top Navbar -->
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="icon-btn menu-btn" id="menuBtn" title="Open Sidebar">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="chat-meta">
+            <h1 class="chat-title" id="chatTitle">New Chat</h1>
+            <div class="model-badge">
+              <span class="dot"></span>
+              <span id="activeModelLabel">Gemini 2.5 Flash</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="navbar-right">
+          <div class="model-selector-wrapper">
+            <select id="modelSelect" class="model-select">
+              <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+              <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+              <option value="local-ollama">Local Ollama</option>
+            </select>
+          </div>
+          <button class="icon-btn" id="settingsIconBtn" title="Settings">
+            <i data-lucide="settings"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat Screen Area -->
+      <div class="chat-window" id="chatWindow">
+        
+        <!-- Onboarding / Welcome State -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-header">
+            <div class="welcome-logo">
+              <i data-lucide="sparkles"></i>
+            </div>
+            <h2>How can Astra assist you today?</h2>
+            <p>A premium web assistant powered by Gemini. Ask coding questions, request analysis, or brainstorm ideas.</p>
+          </div>
+          
+          <div class="suggestions-grid">
+            <div class="suggestion-card" data-prompt="Explain quantum computing in simple terms for a high school student.">
+              <div class="card-icon"><i data-lucide="lightbulb"></i></div>
+              <h3>Explain concepts</h3>
+              <p>"Quantum computing in simple terms..."</p>
+            </div>
+            <div class="suggestion-card" data-prompt="Write a modern HTML/CSS responsive flexbox navigation bar template.">
+              <div class="card-icon"><i data-lucide="code-2"></i></div>
+              <h3>Write code</h3>
+              <p>"Responsive flexbox navigation template..."</p>
+            </div>
+            <div class="suggestion-card" data-prompt="Help me brainstorm 5 unique app ideas combining AI with climate tech.">
+              <div class="card-icon"><i data-lucide="pen-tool"></i></div>
+              <h3>Brainstorm ideas</h3>
+              <p>"5 unique app ideas for climate tech & AI..."</p>
+            </div>
+            <div class="suggestion-card" data-prompt="Draft a polite email asking for an extension on a project deadline.">
+              <div class="card-icon"><i data-lucide="file-text"></i></div>
+              <h3>Draft content</h3>
+              <p>"Polite email requesting a deadline extension..."</p>
+            </div>
+          </div>
+
+          <div class="api-key-warning-card" id="apiKeyWarning">
+            <i data-lucide="alert-circle" class="warning-icon"></i>
+            <div class="warning-content">
+              <h3>API Key Required</h3>
+              <p>To start chatting, you need to configure your Gemini API Key in the settings.</p>
+              <button class="btn btn-primary btn-sm" id="warningSetupBtn">Setup API Key</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Chat Messages Container -->
+        <div class="messages-container" id="messagesContainer" style="display: none;">
+          <!-- Messages will be injected dynamically -->
+        </div>
+
+        <!-- Chat Bottom Anchor (for scroll calculations) -->
+        <div id="chatBottom"></div>
+      </div>
+
+      <!-- Input Panel -->
+      <footer class="input-panel">
+        <div class="input-container">
+          <div class="input-actions-left">
+            <button class="icon-btn" id="clearChatContextBtn" title="Clear current chat messages" disabled>
+              <i data-lucide="rotate-ccw"></i>
+            </button>
+          </div>
+          
+          <textarea 
+            class="chat-textarea" 
+            id="chatInput" 
+            placeholder="Ask Astra anything..." 
+            rows="1"
+          ></textarea>
+          
+          <div class="input-actions-right">
+            <button class="send-btn" id="sendBtn" title="Send Message" disabled>
+              <i data-lucide="arrow-up"></i>
+            </button>
+          </div>
+        </div>
+        <div class="input-footer-note">
+          Astra can make mistakes. Consider checking important information.
+        </div>
+      </footer>
+      
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal-backdrop" id="settingsModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title-wrapper">
+            <i data-lucide="settings" class="modal-title-icon"></i>
+            <h2>Configuration Settings</h2>
+          </div>
+          <button class="icon-btn close-modal-btn" id="closeSettingsBtn" title="Close Settings">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          <div class="form-group">
+            <label for="apiKeyInput">Gemini API Key</label>
+            <div class="api-key-input-wrapper">
+              <input 
+                type="password" 
+                id="apiKeyInput" 
+                placeholder="AIzaSy..." 
+                class="form-control"
+              />
+              <button class="icon-btn toggle-visibility-btn" id="toggleApiKeyVisibility" title="Toggle visibility">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <span class="help-text">
+              Your API key is saved locally in your browser cache and is never sent to any server other than Google's Gemini endpoint. Get a key from the <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio <i data-lucide="external-link" class="inline-icon"></i></a>.
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="ollamaHostInput">Ollama Server Host URL</label>
+            <input 
+              type="text" 
+              id="ollamaHostInput" 
+              placeholder="http://localhost:11434" 
+              class="form-control"
+            />
+            <span class="help-text">
+              The local port and IP where Ollama is running. Default is usually `http://localhost:11434`.
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="ollamaModelInput">Ollama Model Name</label>
+            <input 
+              type="text" 
+              id="ollamaModelInput" 
+              placeholder="llama3.2" 
+              class="form-control"
+            />
+            <span class="help-text">
+              The specific model downloaded in Ollama (e.g., `llama3`, `llama3.2`, `qwen2.5:1.5b`, `mistral`).
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="systemInstructionInput">System Instructions / Personality</label>
+            <textarea 
+              id="systemInstructionInput" 
+              placeholder="You are Astra, a helpful, precise, and highly capable AI assistant..." 
+              class="form-control" 
+              rows="4"
+            ></textarea>
+            <span class="help-text">
+              Define the AI's behavior, tone of voice, and guidelines. (Note: Ollama models may require specific formatting/support for system prompts).
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Model Configuration Info</label>
+            <div class="info-card">
+              <p><strong>Gemini Models</strong>: Requires a Gemini API Key. Blazing fast, highly intelligent, and runs in the cloud.</p>
+              <p><strong>Local Ollama</strong>: Requires Ollama running locally. Completely free, offline, and unlimited.</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelSettingsBtn">Cancel</button>
+          <button class="btn btn-primary" id="saveSettingsBtn">Save Configuration</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main JavaScript File -->
+</body>
+</html>
